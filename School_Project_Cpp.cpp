@@ -23,14 +23,12 @@ void display() {
                 if (number / 100 == 0) {
                     cout << " ";
                 }
-
+                
                 cout << number;
 
                 if (number / 10 == 0) {
                     cout << " ";
                 }
-                
-
             }
 
             if (j < tabsize - 1) {
@@ -68,13 +66,38 @@ void action(int field) {
     }
 }
 
+char checkBoard() {
+    for (int i = 1; i < tabsize - 1; i++) {
+        for (int j = 1; i < tabsize - 1; j++) {
+
+            if (tab[i][j-1] == tab[i][j] && tab[i][j] == tab[i][j+1]) {
+                return tab[i][j];
+            }
+            
+            if (tab[i+1][j-1] == tab[i][j] && tab[i][j] == tab[i-1][j+1]) {
+                return tab[i][j];
+            }
+
+            if (tab[i+1][j] == tab[i][j] && tab[i][j] == tab[i-1][j]) {
+                return tab[i][j];
+            }
+
+            if (tab[i+1][j+1] == tab[i][j] && tab[i][j] == tab[i-1][j-1]) {
+                return tab[i][j];
+            }
+        }
+    }
+    return ' ';
+}
+
 
 int main()
 {
+    char check = ' ';
     string temp = " ";
 
     cout << "Choose size of the board --> ( 3 - 20 )" << endl;
-
+    
     do {
         getline(cin, temp);
         
@@ -104,17 +127,17 @@ int main()
         try {
             int field = stoi(temp);
             action(field);
+            check = checkBoard();
+            if (check != ' ') {
+                break;
+            }
         }
         catch (const exception&) {
             cout << endl << "Wrong value, please enter again :D" << endl;
         }
     }
     
-    /* X |   | O
-       ---+---+---
-       X | O |
-       ---+---+---
-      | X | O |    */
-
-
+    if (check != ' ') {
+        cout << "\033[38;5;202m Winner --> \033[" << colors[check == 'o'] << "m" << check << "\033[0m" << endl;
+    }
 }
